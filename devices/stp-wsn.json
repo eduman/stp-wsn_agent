@@ -1,0 +1,45 @@
+{
+  "name": "stpbs",
+  "description": "STP Base Station connecting the demo WSN",
+  "meta": {
+    "vendor": "STP"
+  },
+  "ttl": 30,
+  "resources": [
+    {
+      "type": "Resource",
+      "name": "wsn",
+      "meta": {
+        "vendor": "STP",
+        "type": "WSN of environmental sensors",
+        "sensors": ["temperature", "humidity"]
+      },
+      "agent": {
+        "type": "service",
+        "dir": null,
+        "exec": "python agent/stpwsn/stpAgent.py"
+      },
+      "representation": {},
+      "protocols": [
+        {
+          "type": "REST",
+          "methods": [
+            "GET"
+          ],
+          "content-types": [
+            "text/plain"
+          ]
+        },
+        {
+          "type": "MQTT",
+          "methods": [
+            "PUB"
+          ],
+          "content-types": [
+            "application/senml+json"
+          ]
+        }
+      ]
+    }
+  ]
+}
