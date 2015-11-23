@@ -46,23 +46,28 @@ def main():
 				line = line.strip().replace('\r', '').replace('\n', '')
 				if line:
 					fields = line.split(';')
+					isToBeSent = False
 					sample = ""
 					nodeID = "Unknown"
 					for field in fields:
 						if field:
 							keyVal = field.split("=")
 							if len(keyVal) == 2 and keyVal[0].lower() == "id":
-								nodeID = keyVal[1]	
+								nodeID = keyVal[1]
+								isToBeSent = True	
 							elif len (keyVal) == 2 and keyVal[0].lower() == "t":
 								val = keyVal[1]
 								sample = makeSample(sample, "Temperature", "Cel", val)
 							elif len(keyVal) == 2 and keyVal[0].lower() == "h":
 								val = keyVal[1]
 								sample = makeSample(sample, "Humidity", "Percent", val)
-					unixTimeStamp = int(time.time())
-					out.write(myJsonNode % (GATEWAY_NAME, nodeID, str(unixTimeStamp), sample))
-					#sys.stdout.write(str(fields) + '\n')
-					out.flush()
+					
+					if isToBeSent:
+						unixTimeStamp = int(time.time())
+						out.write(myJsonNode % (GATEWAY_NAME, nodeID, str(unixTimeStamp), sample))
+						#sys.stdout.write(str(fields) + '\n')
+						out.flush()
+
 				time.sleep(0.1)
 			except serial.serialutil.SerialException, e:
 				err.write(ERROR_MSG % ("SerialException", str(e)))
